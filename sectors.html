@@ -2,7 +2,7 @@
 <html>
 <body>
 
-<canvas id="canvas1" width="400" height="600" style="border:1px solid #d3d3d3;"></canvas>
+<canvas id="canvas1" width="300" height="533" style="border:1px solid #d3d3d3;"></canvas>
     
 <br>
 <input id="clickMe" type="button" value="clickme" onclick="drawSector();" />
@@ -12,8 +12,8 @@
 var can = document.getElementById('canvas1');
 var ctx = can.getContext('2d');
 
-var cx = 200;
-var cy  =200;
+var cx = 150;
+var cy  =150;
 
 // in case you like using degrees
 function toRadians(deg) {
@@ -26,7 +26,7 @@ function drawSector() {
 
 ctx.beginPath();
 ctx.moveTo(cx,cy);
-ctx.arc(cx,cy,90,0,toRadians(90));
+ctx.arc(cx,cy,100,0,toRadians(90));
 ctx.lineTo(cx,cy);
 ctx.closePath();
 ctx.line;
