@@ -180,43 +180,51 @@ function deal_and_write_b() {
     setTimeout("main()", pause_time * speed);
 }
 
-function deal_flop(){
-var pause_time=777;
-for(var i=0;i<3;i++)board[i]=cards[deck_index++];
-setTimeout("write_board('0')",(pause_time+100)*speed);
-setTimeout("write_board('1')",(pause_time+250)*speed);
-setTimeout("write_board('2')",(pause_time+400)*speed);
-if(get_num_betting()>1)setTimeout("main()",(pause_time+1000)*speed);
-else setTimeout("ready_for_next_card()",999*speed);
+function deal_flop() {
+    var pause_time = 777;
+    for (var i = 0; i < 3; i++) {
+        board[i] = cards[deck_index++];
+    }
+    setTimeout("write_board('0')", (pause_time + 100) * speed);
+    setTimeout("write_board('1')", (pause_time + 250) * speed);
+    setTimeout("write_board('2')", (pause_time + 400) * speed);
+    if (get_num_betting() > 1) {
+        setTimeout("main()", (pause_time + 1000) * speed);
+    } else {
+        setTimeout("ready_for_next_card()", 999 * speed);
+    }
 }
 
-function deal_fourth(){
- var pause_time=777;
- board[3]=cards[deck_index++];
-
-//board[3]="c9";
-
- setTimeout("write_board('3')",(pause_time+100)*speed);
- if(get_num_betting()>1)setTimeout("main()",2000*speed);
- else setTimeout("ready_for_next_card()",999*speed);
+function deal_fourth() {
+    var pause_time = 777;
+    board[3] = cards[deck_index++];
+    setTimeout("write_board('3')", (pause_time + 100) * speed);
+    if (get_num_betting() > 1) {
+        setTimeout("main()", 2000 * speed);
+    } else {
+        setTimeout("ready_for_next_card()", 999 * speed);
+    }
 }
-function deal_fifth(){
- var pause_time=777;
- board[4]=cards[deck_index++];
 
-//board[4]="c10";
-
- setTimeout("write_board('4')",(pause_time+100)*speed);
- if(get_num_betting()>1)setTimeout("main()",2000*speed);
- else setTimeout("ready_for_next_card()",999*speed);
+function deal_fifth() {
+    var pause_time = 777;
+    board[4] = cards[deck_index++];
+    setTimeout("write_board('4')", (pause_time + 100) * speed);
+    if (get_num_betting() > 1) {
+        setTimeout("main()", 2000 * speed);
+    } else {
+        setTimeout("ready_for_next_card()", 999 * speed);
+    }
 }
+
 function write_board(n){
- var pic=get_next_pic();
- var pic_click="http://google.com/";
-if(pix.length<50){pic=board[n].substring(0,1)+".gif";pic_click=SUIT_LINK;}
- write_frame("board"+n,"<html><body bgcolor="+BG_COLOR+" leftmargin=3><table width=100% bgcolor=FFFFFF><tr><td valign=top>"+
-  get_card_html(board[n])+"</td></tr></table><a href=\""+pic_click+"\" target=_blank><img border=0 width=100% src='"+
-  pic+"'></a><br><table width=100% height=100% bgcolor=FFFFFF><tr><td></td></tr></table></body></html>");
+    var pic=get_next_pic();
+    var pic_click="http://google.com/";
+    if (pix.length < 50) {
+        pic = board[n].substring(0, 1) + ".gif";
+        pic_click = SUIT_LINK;
+    }   
+    write_frame("board" + n, "<html><body bgcolor=" + BG_COLOR + " leftmargin=3><table width=100% bgcolor=FFFFFF><tr><td valign=top>" + get_card_html(board[n]) + "</td></tr></table><a href=\"" + pic_click + "\" target=_blank><img border=0 width=100% src='" + pic + "'></a><br><table width=100% height=100% bgcolor=FFFFFF><tr><td></td></tr></table></body></html>");
 }
 
 function main() {
@@ -227,185 +235,226 @@ function main() {
         players[current_bettor_index].status = "CALL";
         increment_bettor_index = 1;
     } else if (players[current_bettor_index].status == "CALL" && players[current_bettor_index].subtotal_bet == current_bet) {
-        increment_bettor_index=1;
+        increment_bettor_index = 1;
     } else {
-    players[current_bettor_index].status = "";
-    if (current_bettor_index == 0) { // RE What is this: js inpu
-    var call_button_text = "     Call     ";
-    var fold_button = "<input type=button value=Fold onclick='parent.human_fold()'>"; // RE no punctuation in html
-    var bet_button_text = "   Raise   ";
-    var to_call = current_bet-players[0].subtotal_bet;
-    if (to_call > players[0].bankroll) {
-        to_call = players[0].bankroll;
-    }
-    if (to_call == 0) {
-        call_button_text = "   Check   ";
-        fold_button = "";
-        bet_button_text = "     Bet     ";
-    }
-    var quick_values = new Array(6);
-    if  (to_call < players[0].bankroll) {
-        quick_values[0] = current_min_raise;
-    }
-    var quick_start = quick_values[0];
-    if (quick_start < 20) {
-        quick_start = 20;
-    } else {
-        quick_start = current_min_raise + 20;
-    }
-    for (var i = 0; i < 5; i++) {
-        if (quick_start + 20 * i < players[0].bankroll) {
-            quick_values[i + 1] = quick_start + 20 * i;
+        players[current_bettor_index].status = "";
+        if (current_bettor_index == 0) { // RE What is this?: js inpu
+            var call_button_text = "     Call     ";
+            var fold_button = "<input type=button value=Fold onclick='parent.human_fold()'>"; // RE no punctuation in html
+            var bet_button_text = "   Raise   ";
+            var to_call = current_bet-players[0].subtotal_bet;
+            if (to_call > players[0].bankroll) {
+                to_call = players[0].bankroll;
+            }
+            if (to_call == 0) {
+                call_button_text = "   Check   ";
+                fold_button = "";
+                bet_button_text = "     Bet     ";
+            }
+            var quick_values = new Array(6);
+            if  (to_call < players[0].bankroll) {
+                quick_values[0] = current_min_raise;
+            }
+            var quick_start = quick_values[0];
+            if (quick_start < 20) {
+                quick_start = 20;
+            } else {
+                quick_start = current_min_raise + 20;
+            }
+            for (var i = 0; i < 5; i++) {
+                if (quick_start + 20 * i < players[0].bankroll) {
+                    quick_values[i + 1] = quick_start + 20 * i;
+                }
+            }
+            var bet_or_raise = "Bet";
+            var quick_color = "";
+            if (to_call > 0) {
+                bet_or_raise = "Raise";
+                quick_color = " bgcolor=" + BG_COLOR;
+            }
+            var quick_bets = "<b>Quick " + bet_or_raise + "s</b><br>";
+            for (var i = 0; i < 6; i++) {
+                if (quick_values[i]) {
+                    quick_bets += "<a href='javascript:parent.handle_human_bet(" + quick_values[i] + ")'>" + quick_values[i] + "</a>" + "&nbsp;&nbsp;&nbsp;";
+                }
+            }
+            quick_bets += "<a href='javascript:parent.handle_human_bet(" + players[0].bankroll + ")'>All In!</a>" + 
+                "<form onsubmit='parent.handle_human_bet(b.value);return false;'><font size=+2>&nbsp;</font><input type=text size=4 name=b><input type=submit value=" + bet_or_raise + "></form>";
+            var html = "<html><body vlink=0000FF topmargin=2 bottommargin=0 bgcolor=" + BG_HILITE + " onload='document.f.c.focus();'><table width=100%><tr><td colspan=2>" + get_pot_size_html() + 
+                "</td></tr><tr><td><font size=+2><b>Current total bet: " + current_bet + "</b><br> You need <font color=FF0000 size=+3>" + to_call + "</font> more to call.</font>" + 
+                "<form name=f><input name=c type=button value='" + call_button_text + "' onclick='parent.human_call()'><input type=button value='" + bet_button_text + "' onclick='parent.human_raise()'>" + fold_button + 
+                "</form></td><td valign=bottom><table" + quick_color + "><tr><td align=center>" + quick_bets + "</td></tr></table></td></tr></table></body></html>";
+            write_player(0, 1, 0, 1);
+            write_frame("general", html);
+            return;
+        } else {
+            write_player(current_bettor_index, 1, 0, 1);
+            setTimeout("bot_bet(" + current_bettor_index + ")", 777 * speed);
+            return;
         }
     }
-    var bet_or_raise="Bet";
-    var quick_color="";
-    if(to_call>0){bet_or_raise="Raise";quick_color=" bgcolor="+BG_COLOR;}
-    var quick_bets="<b>Quick "+bet_or_raise+"s</b><br>";
-    for(var i=0;i<6;i++){
-    if(quick_values[i])quick_bets+="<a href='javascript:parent.handle_human_bet("+quick_values[i]+")'>"+quick_values[i]+"</a>"+"&nbsp;&nbsp;&nbsp;";
+    var can_break = true;
+    for (var j = 0; j < players.length; j++) {
+        var s = players[j].status;
+        if (s == "OPTION") {
+            can_break = false;
+            break;
+        }
+        if (s != "BUST" && s != "FOLD") { 
+            if (has_money(j) && players[j].subtotal_bet < current_bet) {
+                can_break = false; 
+                break;
+            }
+        }                                                                     
     }
-    quick_bets+="<a href='javascript:parent.handle_human_bet("+players[0].bankroll+")'>All In!</a>"+
-        "<form onsubmit='parent.handle_human_bet(b.value);return false;'><font size=+2>&nbsp;</font><input type=text size=4 name=b><input type=submit value="+bet_or_raise+"></form>";
-    var html="<html><body vlink=0000FF topmargin=2 bottommargin=0 bgcolor="+BG_HILITE+" onload='document.f.c.focus();'><table width=100%><tr><td colspan=2>"+get_pot_size_html()+
-        "</td></tr><tr><td><font size=+2><b>Current total bet: "+current_bet+"</b><br> You need <font color=FF0000 size=+3>"+to_call+"</font> more to call.</font>"+
-        "<form name=f><input name=c type=button value='"+call_button_text+"' onclick='parent.human_call()'><input type=button value='"+bet_button_text+"' onclick='parent.human_raise()'>"+fold_button+
-        "</form></td><td valign=bottom><table"+quick_color+"><tr><td align=center>"+quick_bets+"</td></tr></table></td></tr></table></body></html>";
-    write_player(0,1,0,1);
-    write_frame("general",html);
-    return;
-    }else{
-    write_player(current_bettor_index,1,0,1);
-    setTimeout("bot_bet("+current_bettor_index+")",777*speed);
-    return;
+    if (increment_bettor_index) {
+        current_bettor_index =  get_next_player_position(current_bettor_index, 1);
     }
+    if (can_break) {
+        setTimeout("ready_for_next_card()", 999 * speed);
+    } else {
+        main();
     }
-    var can_break=true;
-    for(var j=0;j<players.length;j++){
-    var s=players[j].status;
-    if(s=="OPTION"){can_break=false;break;}
-    if(s!="BUST"&&s!="FOLD"){if(has_money(j)&&players[j].subtotal_bet<current_bet){can_break=false;break;}}
-     }
-    if(increment_bettor_index)current_bettor_index=get_next_player_position(current_bettor_index,1);
-    if(can_break)setTimeout("ready_for_next_card()",999*speed);
-    else main();
 }
 
 function handle_end_of_round(){
- var candidates=new Array(players.length);
- var allocations=new Array(players.length);
- var my_total_bets_per_player=new Array(players.length);
- for(var i=0;i<candidates.length;i++){
-  allocations[i]=0;
-  my_total_bets_per_player[i]=players[i].total_bet;
-  if(players[i].status!="FOLD"&&players[i].status!="BUST")candidates[i]=players[i];
- }
-
- var my_total_pot_size=get_pot_size();
- var my_best_hand_name="";
- var best_hand_players;
- while(1){
-  var winners=get_winners(candidates);
-  if(!my_best_hand_name){
-   my_best_hand_name=get_last_winning_hand_name();
-   best_hand_players=winners;
-
-if(winners[0])HUMAN_WINS_AGAIN++;
-else HUMAN_WINS_AGAIN=0;
-
-  }
-  if(!winners)break;
-
-  var lowest_in_for=my_total_pot_size*2;
-  var num_winners=0;
-  for(var i=0;i<winners.length;i++){
-   if(!winners[i])continue;
-   num_winners++;
-   if(my_total_bets_per_player[i]<lowest_in_for)lowest_in_for=my_total_bets_per_player[i];
-  }
-
-  var my_pot=0;
-  for(var i=0;i<players.length;i++){
-   if(lowest_in_for>=my_total_bets_per_player[i]){
-    my_pot+=my_total_bets_per_player[i];
-    my_total_bets_per_player[i]=0;
-   }else{
-    my_pot+=lowest_in_for;
-    my_total_bets_per_player[i]-=lowest_in_for;
-   }
-  }
-
-  var share=my_pot/num_winners;
-  for(var i=0;i<winners.length;i++){
-   if(my_total_bets_per_player[i]<.01)candidates[i]=null;
-   if(!winners[i])continue;
-   allocations[i]+=share;
-   my_total_pot_size-=share;
-  }
- }
-
- var winner_text="";
- var human_loses=0;
- for(var i=0;i<allocations.length;i++){
-  if(allocations[i]>0){
-   var a_string=""+allocations[i];
-   var dot_index=a_string.indexOf(".");
-   if(dot_index>0){
-    a_string=""+a_string+"00";
-    allocations[i]=a_string.substring(0,dot_index+3)-0;
-   }
-   winner_text+=allocations[i]+" to "+players[i].name+". ";
-   players[i].bankroll+=allocations[i];
-   if(best_hand_players[i])write_player(i,2,1,0);
-   else write_player(i,1,1,0);
-  }else{
-   if(!has_money(i)&&players[i].status!="BUST"){
-    players[i].status="BUST";
-    if(i==0)human_loses=1;
-   }
-   if(players[i].status!="FOLD")write_player(i,0,1,0);
-  }
- }
-
- var detail="";
- for(var i=0;i<players.length;i++){
-  detail+=players[i].name+" bet "+players[i].total_bet+" & got "+allocations[i]+".\\n";
- }
- detail=" (<a href='javascript:alert(\""+detail+"\")'>details</a>)";
-
- var hilite_a=" name=c",hilite_b="";
- if(human_loses){hilite_a="",hilite_b=" name=c";}
- var the_buttons="<input"+hilite_a+" type=button value='Continue Game' onclick='parent.new_round()'><input"+hilite_b+" type=button value='Restart Game' onclick='parent.confirm_new()'>";
- if(players[0].status=="BUST"&&!human_loses){
-  the_buttons="<input name=c type=button value='Restart Game' onclick='parent.STOP_AUTOPLAY=1'>";
-  setTimeout("autoplay_new_round()",1500+1100*speed);
- }
-
- var html="<html><body topmargin=2 bottommargin=0 bgcolor="+BG_HILITE+" onload='document.f.c.focus();'><table><tr><td>"+get_pot_size_html()+
-  "</td></tr></table><br><font size=+2 color=FF0000><b>WINNER! "+my_best_hand_name+". "+winner_text+"</b></font>"+detail+"<br>"+
-  "<form name=f>"+the_buttons+"<input type=button value=Quit onclick='parent.confirm_quit()'></form></body></html>";
- write_frame("general",html);
-
- var elapsed_seconds=((new Date())-START_DATE)/1000;
- var elapsed_minutes=""+(elapsed_seconds/60);
- var dot_i=elapsed_minutes.indexOf(".");
- if(dot_i>0)elapsed_minutes=elapsed_minutes.substring(0,dot_i);
- var and_seconds=""+(elapsed_seconds-elapsed_minutes*60);
- dot_i=and_seconds.indexOf(".");
- if(dot_i>0)and_seconds=and_seconds.substring(0,dot_i);
-
- if(human_loses==1)alert("Sorry, you busted, "+players[0].name+".\n\n"+elapsed_minutes+" minutes "+and_seconds+" seconds, "+NUM_ROUNDS+" deals.");
- else{
-  var num_playing=0;
-  for(var i=0;i<players.length;i++){if(has_money(i))num_playing+=1;}
-  if(num_playing<2){
-   var end_msg="GAME OVER!";
-   if(has_money(0))end_msg+="\n\nYOU WIN "+players[0].name.toUpperCase()+"!!!";
-   else end_msg+="\n\nSorry you lost.";
-   alert(end_msg+"\n\nThis game lasted "+elapsed_minutes+" minutes "+and_seconds+" seconds, "+NUM_ROUNDS+" deals.");
-  }
- }
+    var candidates = new Array(players.length);
+    var allocations = new Array(players.length);
+    var my_total_bets_per_player = new Array(players.length);
+    for(var i = 0; i < candidates.length; i++) {
+        allocations[i] = 0;
+        my_total_bets_per_player[i] = players[i].total_bet;
+        if (players[i].status != "FOLD" && players[i].status != "BUST") {
+            candidates[i] = players[i];
+        }
+    }
+    var my_total_pot_size = get_pot_size();
+    var my_best_hand_name = "";
+    var best_hand_players;
+    while(1) { // RE isn't this always going to run?
+        var winners = get_winners(candidates);
+        if (!my_best_hand_name) {
+            my_best_hand_name = get_last_winning_hand_name();
+            best_hand_players = winners;
+            if (winners[0]) {
+                HUMAN_WINS_AGAIN++;
+            } else {
+                HUMAN_WINS_AGAIN=0;
+            }
+        }
+        if (!winners) {
+            break;
+        }
+        var lowest_in_for = my_total_pot_size * 2;
+        var num_winners = 0;
+        for (var i = 0; i < winners.length; i++) {
+            if (!winners[i]) {
+                continue;
+            }
+            num_winners++;
+            if (my_total_bets_per_player[i] < lowest_in_for) {
+                lowest_in_for = my_total_bets_per_player[i];
+            }
+        }
+        var my_pot = 0;
+        for (var i = 0; i < players.length; i++) {
+            if (lowest_in_for >= my_total_bets_per_player[i]) {
+                my_pot += my_total_bets_per_player[i];
+                my_total_bets_per_player[i] = 0;
+            } else {
+                my_pot += lowest_in_for;
+                my_total_bets_per_player[i] -= lowest_in_for;
+            }
+        }
+        var share = my_pot / num_winners;
+        for (var i = 0; i < winners.length; i++) {
+            if (my_total_bets_per_player[i] < .01) {
+                candidates[i] = null;
+            }
+            if (!winners[i]) {
+                continue;
+            }
+            allocations[i] += share;
+            my_total_pot_size -= share;
+        }
+    }
+    var winner_text = "";
+    var human_loses = 0;
+    for (var i = 0; i < allocations.length; i++) {
+        if (allocations[i] > 0) {
+            var a_string = "" + allocations[i];
+            var dot_index = a_string.indexOf(".");
+            if (dot_index > 0) {
+                a_string = "" + a_string + "00";
+                allocations[i] = a_string.substring(0, dot_index + 3) - 0;
+            }
+            winner_text += allocations[i] + " to " + players[i].name + ". ";
+            players[i].bankroll += allocations[i];
+            if (best_hand_players[i]) {
+                write_player(i, 2, 1, 0);
+            } else {
+                write_player(i, 1, 1, 0);
+            }
+        } else {
+            if (!has_money(i) && players[i].status != "BUST") {
+                players[i].status = "BUST";
+                if (i == 0) {
+                    human_loses = 1;
+                }
+            }
+            if (players[i].status != "FOLD") {
+                write_player(i, 0, 1, 0);
+            }
+        }
+    }
+    var detail = "";
+    for (var i = 0; i < players.length; i++) {
+       detail += players[i].name + " bet " + players[i].total_bet + " & got " + allocations[i] + ".\\n";
+    }
+    detail = " (<a href='javascript:alert(\"" + detail + "\")'>details</a>)";
+    var hilite_a = " name=c", hilite_b = "";
+    if (human_loses) {
+        hilite_a = "", hilite_b = " name=c";
+    }
+    var the_buttons = "<input" + hilite_a + " type=button value='Continue Game' onclick='parent.new_round()'><input" + hilite_b + " type=button value='Restart Game' onclick='parent.confirm_new()'>";
+    if (players[0].status == "BUST" && !human_loses) {
+        the_buttons = "<input name=c type=button value='Restart Game' onclick='parent.STOP_AUTOPLAY=1'>";
+        setTimeout("autoplay_new_round()", 1500 + 1100 * speed);
+    }
+    var html = "<html><body topmargin=2 bottommargin=0 bgcolor=" + BG_HILITE + " onload='document.f.c.focus();'><table><tr><td>" + get_pot_size_html() + "</td></tr></table><br><font size=+2 color=FF0000><b>WINNER! " + my_best_hand_name + ". " + winner_text + "</b></font>" + detail + "<br>" + "<form name=f>" + the_buttons + "<input type=button value=Quit onclick='parent.confirm_quit()'></form></body></html>";
+    write_frame("general", html);
+    var elapsed_seconds = ((new Date()) - START_DATE) / 1000;
+    var elapsed_minutes = "" + (elapsed_seconds / 60);
+    var dot_i = elapsed_minutes.indexOf(".");
+    if (dot_i > 0) {
+        elapsed_minutes = elapsed_minutes.substring(0, dot_i);
+    }
+    var and_seconds = "" + (elapsed_seconds - elapsed_minutes * 60);
+    dot_i = and_seconds.indexOf(".");
+    if (dot_i > 0) {
+        and_seconds = and_seconds.substring(0, dot_i);
+    }
+    if (human_loses == 1) {
+        alert("Sorry, you busted, " + players[0].name + ".\n\n" + elapsed_minutes + " minutes " + and_seconds + " seconds, " + NUM_ROUNDS + " deals.");
+    } else {
+        var num_playing = 0;
+        for (var i = 0; i < players.length; i++) {
+            if (has_money(i)) {
+                num_playing += 1;
+            }
+        }
+        if (num_playing < 2) {
+            var end_msg = "GAME OVER!";
+            if (has_money(0)) {
+                end_msg += "\n\nYOU WIN " + players[0].name.toUpperCase() + "!!!";
+            } else {
+                end_msg += "\n\nSorry you lost.";
+            }
+            alert(end_msg + "\n\nThis game lasted " + elapsed_minutes + " minutes " + and_seconds + " seconds, " + NUM_ROUNDS + " deals.");
+        }
+    }
 }
+
 function autoplay_new_round(){if(STOP_AUTOPLAY>0){STOP_AUTOPLAY=0;new_game();}else new_round();}
 function ready_for_next_card(){
  var num_betting=get_num_betting();
