@@ -28,12 +28,12 @@ function init() {
 }
 
 function make_deck(){
-    var i, j=0;
-    for(i=2; i<15; i++){
-        cards[j++]="h"+i;
-        cards[j++]="d"+i;
-        cards[j++]="c"+i;
-        cards[j++]="s"+i;
+    var i, j = 0;
+    for(i = 2; i < 15; i++){
+        cards[j++] = "h" + i;
+        cards[j++] = "d" + i;
+        cards[j++] = "c" + i;
+        cards[j++] = "s" + i;
     }
 }
 
@@ -42,21 +42,21 @@ function new_game() {
     NUM_ROUNDS = 0;
     HUMAN_WINS_AGAIN = 0;
     write_frame("general","<html><body bgcolor="+BG_COLOR+"></body></html>");
-    var my_players=[
-        new player("Freddie",0,"","","",0,0),
-        new player("Brian",0,"","","",0,0),
-        new player("Roger",0,"","","",0,0),
-        new player("John",0,"","","",0,0)
+    var my_players = [
+        new player("Freddie", 0, "", "", "", 0, 0),
+        new player("Brian", 0, "", "", "", 0, 0),
+        new player("Roger", 0, "", "", "", 0, 0),
+        new player("John", 0, "", "", "", 0, 0)
     ];
     players = new Array(my_players.length+1);
     var player_name = getCookie("playername");
-    if(!player_name) { 
+    if (!player_name) { 
         player_name="You";
     }
-    players[0] = new player(player_name,0,"","","",0,0); // you are always player 0
+    players[0] = new player(player_name, 0, "", "", "", 0, 0); // you are always player 0
     my_players.sort(compRan); // RE puts other competitors into random order
-    for(var i=1; i<players.length; i++) {
-        players[i] = my_players[i-1]; // RE puts other players in places 1 to 4
+    for (var i = 1; i < players.length; i++) {
+        players[i] = my_players[i - 1]; // RE puts other players in places 1 to 4
     }
     //reset_player_statuses(0);
     //clear_bets();
@@ -114,8 +114,8 @@ function new_round() {
 function collect_cards() {
     board = new Array(5);
     for (var i = 0; i < players.length; i++) {
-        players[i].carda="";
-        players[i].cardb="";
+        players[i].carda = "";
+        players[i].cardb = "";
     }
 }
 
@@ -124,7 +124,7 @@ function shuffle() {
     cards.sort(compRan); // RE compRan gives a random number between -0.5 and 0.5
 }
 
-function blinds_and_deal(){ // RE could probably change this to be based on time not number of players
+function blinds_and_deal() { // RE could probably change this to be based on time not number of players
     SMALL_BLIND = 5;
     BIG_BLIND = 10;
     var num_playing = 0;
@@ -146,7 +146,7 @@ function blinds_and_deal(){ // RE could probably change this to be based on time
     write_player(small_blind, 0, 0, 0);
     var big_blind = get_next_player_position(small_blind,1);
     bet(big_blind,BIG_BLIND);
-    write_player(big_blind,0,0,0);
+    write_player(big_blind, 0, 0, 0);
     players[big_blind].status = "OPTION";
     current_bettor_index = get_next_player_position(big_blind,1);
     deal_and_write_a();
@@ -173,7 +173,7 @@ function deal_and_write_b() {
         if (players[j].cardb) {
             break;
         }
-        players[j].cardb=cards[deck_index++];
+        players[j].cardb = cards[deck_index++];
         setTimeout("write_player(" + j + ",0,0,1)", pause_time * speed);
         pause_time += 550;
     }
@@ -217,7 +217,7 @@ function deal_fifth() {
     }
 }
 
-function write_board(n){
+function write_board(n) {
     var pic=get_next_pic();
     var pic_click="http://google.com/";
     if (pix.length < 50) {
@@ -455,29 +455,54 @@ function handle_end_of_round(){
     }
 }
 
-function autoplay_new_round(){if(STOP_AUTOPLAY>0){STOP_AUTOPLAY=0;new_game();}else new_round();}
+function autoplay_new_round() {
+    if (STOP_AUTOPLAY > 0) {
+        STOP_AUTOPLAY = 0;
+        new_game();
+    } else {
+        new_round();
+    }
+}
+
 function ready_for_next_card(){
- var num_betting=get_num_betting();
- for(var i=0;i<players.length;i++){players[i].total_bet+=players[i].subtotal_bet;}
- clear_bets();
- if(board[4]){
-  handle_end_of_round();
-  return;
- }
- current_min_raise=BIG_BLIND;
- reset_player_statuses(2);
- if(players[button_index].status=="FOLD")players[get_next_player_position(button_index,-1)].status="OPTION";
- else players[button_index].status="OPTION";
- current_bettor_index=get_next_player_position(button_index,1);
- var show_cards=0;
- if(num_betting<2)show_cards=1;
-
- if(!RUN_EM)for(var i=0;i<players.length;i++)if(players[i].status!="BUST"&&players[i].status!="FOLD")write_player(i,0,show_cards,1);
-
- if(num_betting<2)RUN_EM=1;
- if(!board[0])deal_flop();
- else if(!board[3])deal_fourth();
- else if(!board[4])deal_fifth();
+    var num_betting = get_num_betting();
+    for (var i = 0; i < players.length; i++) {
+        players[i].total_bet += players[i].subtotal_bet;
+    }
+    clear_bets();
+    if (board[4]) {
+        handle_end_of_round();
+        return;
+    }
+    current_min_raise = BIG_BLIND;
+    reset_player_statuses(2);
+    if (players[button_index].status == "FOLD") {
+        players[get_next_player_position(button_index, -1)].status = "OPTION";
+    } else {
+        players[button_index].status = "OPTION";
+    }
+    current_bettor_index = get_next_player_position(button_index, 1);
+    var show_cards = 0;
+    if (num_betting < 2) {
+        show_cards = 1;
+    }
+    if (!RUN_EM) {
+        for (var i = 0; i < players.length; i++) {
+            if (players[i].status != "BUST" && players[i].status != "FOLD") {
+                write_player(i, 0, show_cards, 1);
+            }
+        }
+    }
+    if (num_betting < 2) {
+        RUN_EM = 1;
+    }
+    if (!board[0]) {
+        deal_flop();
+    } else if (!board[3]) {
+        deal_fourth();
+    } else if (!board[4]) {
+        deal_fifth();
+    }
 }
 
 function bet(player_index, bet_amount) {
@@ -496,7 +521,7 @@ function bet(player_index, bet_amount) {
         players[player_index].status = "CALL";
     } else if (bet_amount + players[player_index].subtotal_bet == current_bet) {			//CALL
         players[player_index].status = "CALL";
-    } else if (current_bet > players[player_index].subtotal_bet + bet_amount){			//2 SMALL
+    } else if (current_bet > players[player_index].subtotal_bet + bet_amount) {			//2 SMALL
         if (player_index == 0) {
             alert("The current bet to match is " + current_bet + "." + "\nYou must bet a total of at least " + (current_bet-players[player_index].subtotal_bet) + " or fold."); // RE \n gives a new line
         }
@@ -523,85 +548,103 @@ function bet(player_index, bet_amount) {
     return 1;
 }
 
-function human_call(){
- players[0].status="CALL";
- current_bettor_index=get_next_player_position(0,1);
- bet(0,current_bet-players[0].subtotal_bet);
- write_player(0,0,0,0);
- write_ad();
- main();
+function human_call() {
+    players[0].status = "CALL";
+    current_bettor_index = get_next_player_position(0, 1);
+    bet(0, current_bet-players[0].subtotal_bet);
+    write_player(0, 0, 0, 0);
+    write_ad();
+    main();
 }
-function human_raise(){
- var to_call=current_bet-players[0].subtotal_bet;
- var prompt_text="Minimum raise is "+current_min_raise+". How much do you raise? DON'T include the "+to_call+" needed to call.";
- if(to_call==0)prompt_text="The minimum bet is "+current_min_raise+". How much you wanna bet?";
- var bet_amount=prompt(prompt_text,"");
- if(bet_amount==null)return;
- handle_human_bet(bet_amount);
+
+function human_raise() {
+    var to_call = current_bet-players[0].subtotal_bet;
+    var prompt_text = "Minimum raise is " + current_min_raise + ". How much do you raise? DON'T include the " + to_call + " needed to call.";
+    if (to_call == 0) {
+        prompt_text = "The minimum bet is " + current_min_raise + ". How much you wanna bet?";
+    }
+    var bet_amount = prompt(prompt_text, "");
+    if (bet_amount == null) {
+        return;
+    }
+    handle_human_bet(bet_amount);
 }
-function handle_human_bet(bet_amount){
- bet_amount=""+bet_amount;
- var m="";
- for(var i=0;i<bet_amount.length;i++){
-  var c=bet_amount.substring(i,i+1);
-  if(c=="0"||c>0)m+=""+c;
- }
- if(m=="")return;
- bet_amount=m-0;
- if(bet_amount<0||isNaN(bet_amount))bet_amount=0;
- var to_call=current_bet-players[0].subtotal_bet;
- bet_amount+=to_call;
- var is_ok_bet=bet(0,bet_amount);
- if(is_ok_bet){
-  players[0].status="CALL";
-  current_bettor_index=get_next_player_position(0,1);
-  write_player(0,0,0,0);
-  write_ad();
-  main();
- }
+
+function handle_human_bet(bet_amount) {
+    bet_amount = "" + bet_amount;
+    var m = "";
+    for (var i = 0; i < bet_amount.length; i++) {
+        var c = bet_amount.substring(i, i + 1);
+        if (c == "0" || c > 0) {
+            m += "" + c;
+        }
+    }
+    if (m == "") {
+        return;
+    }
+    bet_amount = m - 0;
+    if (bet_amount < 0 || isNaN(bet_amount)) {
+        bet_amount = 0;
+    }
+    var to_call = current_bet - players[0].subtotal_bet;
+    bet_amount += to_call;
+    var is_ok_bet = bet(0, bet_amount);
+    if (is_ok_bet) {
+        players[0].status = "CALL";
+        current_bettor_index = get_next_player_position(0, 1);
+        write_player(0, 0, 0, 0);
+        write_ad();
+        main();
+    }
 }
-function human_fold(){
- players[0].status="FOLD";
- current_bettor_index=get_next_player_position(0,1);
- write_player(0,0,0,0);
- write_basic_general();
- write_ad();
- main();
+
+function human_fold() {
+    players[0].status = "FOLD";
+    current_bettor_index = get_next_player_position(0, 1);
+    write_player(0, 0, 0, 0);
+    write_basic_general();
+    write_ad();
+    main();
 }
-function bot_bet(x){
- var b=0;
- var n=current_bet-players[x].subtotal_bet;
- if(!board[0])b=get_preflop_bet();
- else b=get_postflop_bet();
- if(b>=players[x].bankroll)	//ALL IN
-   players[x].status="";
- else if(b<n){			//BET 2 SMALL
-  b=0;
-  players[x].status="FOLD";
- }else if(b==n){		//CALL
-  players[x].status="CALL";
- }else if(b>n){
-  if(b-n<current_min_raise){	//RAISE 2 SMALL
-   b=n;
-   players[x].status="CALL";
-  }else players[x].status="";	//RAISE
- }
- if(bet(x,b)==0){
-  players[x].status="FOLD";
-  bet(x,0);
- }
- write_player(current_bettor_index,0,0,0);
- current_bettor_index=get_next_player_position(current_bettor_index,1);
- main();
+
+function bot_bet(x) {
+    var b = 0;
+    var n = current_bet-players[x].subtotal_bet;
+    if(!board[0]) {
+        b = get_preflop_bet();
+    } else {
+        b = get_postflop_bet();
+    }
+    if (b >= players[x].bankroll) { 	//ALL IN
+        players[x].status="";
+    } else if (b < n) {			//BET 2 SMALL
+        b = 0;
+        players[x].status = "FOLD";
+    } else if (b == n) {		//CALL
+        players[x].status="CALL";
+    } else if (b > n) {
+        if (b - n < current_min_raise) {	//RAISE 2 SMALL
+            b = n;
+            players[x].status = "CALL";
+        } else {
+            players[x].status="";
+        }	//RAISE
+    }
+    if (bet(x, b) == 0) {
+        players[x].status = "FOLD";
+        bet(x, 0);
+    }
+    write_player(current_bettor_index, 0, 0, 0);
+    current_bettor_index = get_next_player_position(current_bettor_index, 1);
+    main();
 }
 
 function write_player(n, hilite, show_cards, mode) {
     var carda = "", cardb = "";
     var base_background = BG_COLOR;
     if (hilite == 1) {
-        base_background=BG_HILITE;
-    }
-    else if (hilite == 2) {
+        base_background = BG_HILITE;
+    } else if (hilite == 2) {
         base_background="FF0000"; // RE this is red - to highlight the winning hand
     }
     if (players[n].status == "FOLD") {
@@ -628,24 +671,33 @@ function write_player(n, hilite, show_cards, mode) {
             cardb = get_card_html(players[n].cardb);
         }
     }
-    var button="";
+    var button = "";
     if (n == button_index) {
-        button="<font color=FFFFFF>@</font>";
+        button = "<font color=FFFFFF>@</font>";
     }
     var bet_text = "";
-    var allin="bet:";
-    if(!has_money(n))allin="<font color=FF0000>ALL IN:</font>";
-    if(mode!=1||players[n].subtotal_bet>0||players[n].status=="CALL")bet_text="<b><font size=+2>"+allin+" <font color=00EE00>"+players[n].subtotal_bet+"</font></font></b>";
-    else if(!has_money(n)&&players[n].status!="FOLD"&&players[n].status!="BUST")bet_text="<b><font size=+2 color=FF0000>ALL IN</font></b>";
-    if(players[n].status=="FOLD")bet_text="<b><font size=+2>FOLDED</font></b>";
-    else if(players[n].status=="BUST")bet_text="<b><font size=+2 color=FF0000>BUSTED</font></b>";
-    var html="<html><body bgcolor="+base_background+" topmargin=4 bottommargin=0><pre><b><font size=+2>"+button+players[n].name+"</font></b>"
-     +" ["+players[n].bankroll+"]"
-     +"<font size=-1 face=times color="+base_background+">\nCHEAT! "+players[n].carda.substring(0,1)+make_readable_rank(players[n].carda.substring(1))+" "+players[n].cardb.substring(0,1)+make_readable_rank(players[n].cardb.substring(1))+"\n</font>"
-     +"<center><table bgcolor="+base_background+" height=87 width=130><tr align=center><td bgcolor="+background_color_a+" width=50%"+background_a+">"+carda+"</td><td></td><td  bgcolor="+background_color_b+" width=50%"+background_b+">"+cardb+"</td></tr></table><small>"
-    if(navigator.userAgent.indexOf("MSIE")>-1)html+="\n";//FF
-     html+="\n</small>"+bet_text+"</center></pre></body></html>";
-    write_frame("player"+n,html);
+    var allin = "bet:";
+    if (!has_money(n)) {
+        allin = "<font color=FF0000>ALL IN:</font>";
+    }
+    if (mode != 1 || players[n].subtotal_bet > 0 || players[n].status == "CALL") {
+        bet_text = "<b><font size=+2>" + allin + " <font color=00EE00>" + players[n].subtotal_bet + "</font></font></b>";
+    } else {
+        if (!has_money(n) && players[n].status != "FOLD" && players[n].status != "BUST") {
+            bet_text = "<b><font size=+2 color=FF0000>ALL IN</font></b>";
+        }
+    }
+    if (players[n].status == "FOLD") {
+        bet_text = "<b><font size=+2>FOLDED</font></b>";
+    } else if (players[n].status == "BUST") {
+        bet_text = "<b><font size=+2 color=FF0000>BUSTED</font></b>";
+    }
+    var html = "<html><body bgcolor=" + base_background + " topmargin=4 bottommargin=0><pre><b><font size=+2>" + button + players[n].name + "</font></b>" + " [" + players[n].bankroll + "]" + "<font size=-1 face=times color=" + base_background + ">\nCHEAT! " + players[n].carda.substring(0, 1) + make_readable_rank(players[n].carda.substring(1)) + " " + players[n].cardb.substring(0, 1) + make_readable_rank(players[n].cardb.substring(1)) + "\n</font>" + "<center><table bgcolor=" + base_background + " height=87 width=130><tr align=center><td bgcolor=" + background_color_a + " width=50%" + background_a + ">" + carda + "</td><td></td><td  bgcolor=" + background_color_b + " width=50%" + background_b + ">" + cardb + "</td></tr></table><small>"; // RE I added the end ";"
+    if (navigator.userAgent.indexOf("MSIE") > -1) {
+        html+="\n";
+    }//FF
+    html += "\n</small>" + bet_text + "</center></pre></body></html>";
+    write_frame("player" + n, html);
 }
 
 function get_card_html(card) {
@@ -656,7 +708,7 @@ function get_card_html(card) {
     }
     var r = card.substring(1); // RE the character(s) from position 1 onwards
     var rank = make_readable_rank(r);
-    return "<font size=+2 color="+color+"><b>"+rank+"</b></font> <a href='"+SUIT_LINK+"' target=_blank><img src="+suit+".gif border=0 title="+suit+" alt="+suit+"></a>"; // RE what is 'SUIT_LINK' for? At top of page it is defined as SUIT_LINK = "http://google.com/"
+    return "<font size=+2 color=" + color + "><b>" + rank + "</b></font> <a href='" + SUIT_LINK + "' target=_blank><img src=" + suit + ".gif border=0 title=" + suit + " alt=" + suit + "></a>"; // RE what is 'SUIT_LINK' for? At top of page it is defined as SUIT_LINK = "http://google.com/"
 }
 
 function make_readable_rank(r) {
@@ -667,8 +719,17 @@ function make_readable_rank(r) {
     else if (r == 14)return "A";
 }
 
-function get_pot_size_html(){return "<font color=00EE00 size=+4><b>TOTAL POT: "+get_pot_size()+"</b></font>";}
-function get_pot_size(){var p=0;for(var i=0;i<players.length;i++)p+=players[i].total_bet+players[i].subtotal_bet;return p;}
+function get_pot_size_html() {
+    return "<font color=00EE00 size=+3><b>TOTAL POT: " + get_pot_size() + "</b></font>";
+}
+
+function get_pot_size() {
+    var p = 0;
+    for (var i = 0; i < players.length; i++) {
+        p += players[i].total_bet + players[i].subtotal_bet;
+    }
+    return p;
+}
 
 function clear_bets() {
     for (var i = 0; i < players.length; i++) {
@@ -684,7 +745,7 @@ function clear_pot() {
 }
 
 function reset_player_statuses(type) {
-    for (var i=0; i<players.length; i++){
+    for (var i = 0; i < players.length; i++){
         if (type == 0) {
             players[i].status = "";
         } else if (type == 1 && players[i].status != "BUST") {
@@ -695,23 +756,30 @@ function reset_player_statuses(type) {
     }
 }
 
-function get_num_betting(){
- var n=0;
- for(var i=0;i<players.length;i++)if(players[i].status!="FOLD"&&players[i].status!="BUST"&&has_money(i))n++;
- return n;
+function get_num_betting() {
+    var n = 0;
+    for (var i = 0; i < players.length; i++) {
+        if(players[i].status != "FOLD" && players[i].status != "BUST" && has_money(i)) {
+            n++;
+        }
+    }
+    return n;
 }
-function change_name(){
- var name=prompt("What is your name?",getCookie("playername"));
- write_ad();
- if(!name)return;
- players[0].name=name;
- write_player(0,0,0,0);
- setCookie("playername",name);
+
+function change_name() {
+    var name = prompt("What is your name?", getCookie("playername"));
+    write_ad();
+    if (!name) {
+        return;
+    }
+    players[0].name = name;
+    write_player(0, 0, 0, 0);
+    setCookie("playername", name);
 }
 
 function write_frame(f, html, n) {
     try {
-        frames[f].document.open("text/html","replace");
+        frames[f].document.open("text/html", "replace");
         frames[f].document.write(html);
         frames[f].document.close();
         var u = navigator.userAgent;
@@ -720,44 +788,84 @@ function write_frame(f, html, n) {
         }
     }
     catch(e) { //FF
-        if (!n) n = 0;
-        if (n < 9) write_frame(f, html, ++n);
+        if (!n) {
+            n = 0;
+        }
+        if (n < 9) {
+            write_frame(f, html, ++n);
+        }
     }
 }
 
-function write_basic_general(){write_frame("general","<html><body topmargin=2 bottommargin=0 bgcolor="+BG_COLOR+"><table><tr><td>"+get_pot_size_html()+"</td></tr></table></body></html>");}
-function write_settings_frame(){
- var speeds=['2','1','.6','.3','0'];
- var speed_select=['','','','',''];
- var speed_i=getCookie("gamespeed");
- if(speed_i=="")speed_i=1;
- if(speed_i==null||(speed_i!=0&&speed_i!=1&&speed_i!=2&&speed_i!=3&&speed_i!=4))speed_i=1;
- speed_select[speed_i]=" selected";
- set_speed(speeds[speed_i],speed_i);
- var speed_options="";
- for(var i=0;i<speeds.length;i++)speed_options+="<option value='"+speeds[i]+"'"+speed_select[i]+">"+(i+1);
- write_frame("settings","<html><body topmargin=7 bottommargin=0 vlink=0000FF bgcolor="+BG_COLOR+"><pre><center><b><font size=+2>Options</font></b>\n\n<a href='javascript:parent.change_name()'>Your name</a>\n\n<form>Speed <select onchange='parent.set_speed(options[selectedIndex].value,selectedIndex);'>"+speed_options+"</select></form><a target=_blank href=http://rawdataserver.com/poker/help.html>Help</a></center></pre></body></html>");
+function write_basic_general(){
+    write_frame("general", "<html><body topmargin=2 bottommargin=0 bgcolor=" + BG_COLOR + "><table><tr><td>" + get_pot_size_html() + "</td></tr></table></body></html>");
 }
-function set_deck(v){
- if(v<1)pix=original_pix;
- else pix=get_base_deck();
- preload_pix();
- setCookie("deck",v);
- if(board)for(var i=0;i<board.length;i++)if(board[i])write_board(i);
+
+function write_settings_frame() {
+    var speeds = ['2', '1', '.6', '.3', '0'];
+    var speed_select = ['', '', '', '', ''];
+    var speed_i = getCookie("gamespeed");
+    if (speed_i == ""){
+        speed_i = 1;
+    }
+    if (speed_i == null || (speed_i != 0 && speed_i != 1 && speed_i != 2 && speed_i != 3 && speed_i != 4)) {
+        speed_i = 1;
+    }
+    speed_select[speed_i] = " selected";
+    set_speed(speeds[speed_i], speed_i);
+    var speed_options = "";
+    for (var i = 0; i < speeds.length; i++) {
+        speed_options += "<option value='" + speeds[i] + "'" + speed_select[i] + ">" + (i + 1);
+    }
+    write_frame("settings", "<html><body topmargin=7 bottommargin=0 vlink=0000FF bgcolor=" + BG_COLOR + "><pre><center><b><font size=+2>Options</font></b>\n\n<a href='javascript:parent.change_name()'>Your name</a>\n\n<form>Speed <select onchange='parent.set_speed(options[selectedIndex].value,selectedIndex);'>" + speed_options + "</select></form><a target=_blank href=http://rawdataserver.com/poker/help.html>Help</a></center></pre></body></html>");
 }
-function get_base_deck(){
- var n=Math.floor(Math.random()*4);
- if(n<1)return ['d.gif'];
- if(n<2)return ['c.gif'];
- if(n<3)return ['s.gif'];
- return ['h.gif'];
+
+function set_deck(v) {
+    if (v < 1) {
+        pix = original_pix;
+    } else {
+        pix = get_base_deck();
+    }
+    preload_pix();
+    setCookie("deck", v);
+    if (board) {
+        for (var i = 0; i < board.length; i++) {
+            if (board[i]) {
+                write_board(i);
+            }
+        }
+    }
 }
-function set_speed(s,i){speed=s;setCookie("gamespeed",i);}
+
+function get_base_deck() {
+    var n = Math.floor(Math.random() * 4);
+    if (n < 1) {
+        return ['d.gif'];
+    }
+    if (n < 2) {
+        return ['c.gif'];
+    }
+    if (n < 3) {
+        return ['s.gif'];
+    }
+    return ['h.gif'];
+}
+
+function set_speed(s, i) {
+    speed = s;
+    setCookie("gamespeed", i);
+}
 //var adt;
 
-function write_ad(n){
+function write_ad(n) {
     // if(adt)clearTimeout(adt); //IE only now?
-     if(!n)n=9000;n+=1000;if(n>25000)n=25000;
+    if (!n) {
+    n = 9000;
+    }
+    n += 1000;
+    if (n > 25000) {
+        n = 25000;
+    }
 
     // write_frame("ad","<html><head><style>.adHeadline{font:bold 8pt Verdana;}.adText{font:7pt Arial;}</style></head><body topmargin=0 bottommargin=0 leftmargin=0 rightmargin=0 bgcolor=FFFFFF vlink=0000FF><table width=100% cellspacing=0 cellpadding=0><tr><td>...</td></tr></table></body></html>");
 
@@ -787,7 +895,15 @@ function get_next_player_position(i, delta) {
     
 var original_pix,pix=get_base_deck();var pix_index=0;
 
-function get_next_pic(){if(!pix)return "#";if(++pix_index>=pix.length)pix_index=0;return pix[pix_index];}
+function get_next_pic() {
+    if (!pix) {
+        return "#";
+    }
+    if (++pix_index >= pix.length) {
+        pix_index = 0;
+    }
+    return pix[pix_index];
+}
 
 /* RE is this even used?
 function init_pix(d) {
@@ -833,32 +949,59 @@ function preload_pix() { // none of this seems to be needed
     */
 }
 
-var preload_sd=new Image(),preload_sh=new Image(),preload_sc=new Image(),preload_ss=new Image(),preload_cb=new Image();
-function preload_base_pix(){preload_sd.src="d.gif";preload_sh.src="h.gif";preload_sc.src="c.gif";preload_ss.src="s.gif";preload_cb.src="cardback.gif";}
+var preload_sd = new Image(), preload_sh = new Image(), preload_sc = new Image(), preload_ss = new Image(), preload_cb = new Image();
+
+function preload_base_pix() {
+    preload_sd.src = "d.gif";
+    preload_sh.src = "h.gif";
+    preload_sc.src = "c.gif";
+    preload_ss.src = "s.gif";
+    preload_cb.src = "cardback.gif";
+}
+
 function getCookie(key){
-var c=document.cookie;
-var a=c.indexOf(key+"="); //buggish
-if(a<0)return "";
-a+=key.length+1;
-var b=c.indexOf(";",a);
-if(b<=a)return c.substring(a);
-return c.substring(a,b);
+    var c = document.cookie;
+    var a = c.indexOf(key + "="); //buggish
+    if (a < 0) {
+        return "";
+    }
+    a += key.length + 1;
+    var b = c.indexOf(";", a);
+    if (b <= a) {
+        return c.substring(a);
+    }
+    return c.substring(a, b);
+    }
+
+function setCookie(key, val) {
+    if (getCookie(key) == val) {
+        return;
+    }
+    var d = new Date();
+    var p = Date.parse(d);
+    d.setTime(p + 365 * 24 * 60 * 60 * 1000);
+    var u = d.toUTCString();
+    document.cookie = key + "=" + val + ";expires=" + u;
 }
-function setCookie(key,val){
-if(getCookie(key)==val)return;
-var d=new Date();var p=Date.parse(d);
-d.setTime(p+365*24*60*60*1000);
-var u=d.toUTCString();
-document.cookie=key+"="+val+";expires="+u;
-}
+
 function has_money(i) {
     if (players[i].bankroll >= .01) {
         return true;
     }
     return false;
 }
-function confirm_new(){if(confirm("Are you sure that you want to restart the entire game?"))new_game();}
-function confirm_quit(){if(confirm("Are you sure that you want to quit?"))parent.location.href=BACK_HOME_LINK;}
+
+function confirm_new() {
+    if (confirm("Are you sure that you want to restart the entire game?")) {
+        new_game();
+    }
+}
+
+function confirm_quit() {
+    if (confirm("Are you sure that you want to quit?")) {
+        parent.location.href=BACK_HOME_LINK;
+    }
+}
 
 function compRan() {
     return 0.5 - Math.random(); // RE creates random number between -0.5 and 0.5.  Used to shuffle cards
